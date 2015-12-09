@@ -56,6 +56,24 @@ class MainPageHandler(webapp2.RequestHandler):
       'login_url': users.create_login_url('/')
       }
       render_template(self, 'login.html', page_params)
+  
+############################TESTTTTTT!!!!!!!!!!!!!###################################################
+  # def get(self):
+  #     client = get_user_nickname()
+  #     client = user_model()
+# class testUserMod(webapp2.RequestHandler):
+#   def get(self):
+#     myname = self.request.get('test')
+#     client = get_user_nickname()
+#     client.username = myname
+#     task._put()
+#     testname = client.username
+#     self.response.out.write(testname)
+# class testme(webapp2.RequestHandler):
+#   def get(self):
+#     render_template(self, 'usermodtest.html', {})
+
+#################JSFJSDJFLJFLJDLFJSLDFLJDSLJFDSJLFJSJDFLJFLJ##############################################################
 
 class ProfilePageHandler(webapp2.RequestHandler):
   def get(self):
@@ -160,6 +178,7 @@ class ClaimHandler(webapp2.RequestHandler):
   def get(self):
     id = self.request.get('id')
     task = get_task(id)
+    client = get_user_nickname()
     if task:
       page_params = {
         'task': task
@@ -227,6 +246,12 @@ class Task_Model(ndb.Model):
   reported = ndb.BooleanProperty()
   time_created = ndb.DateTimeProperty(auto_now_add=True)
 
+# class user_Model(ndb.Model):
+#   username = ndb.StringProperty()
+#   claimedTasks = ndb.StringProperty(repeated=True)
+#   BestSub = ndb.StringProperty()
+
+
 
 ###############################################################################
 # static methods
@@ -261,7 +286,9 @@ mappings = [
   ('/claim', ClaimHandler),
   ('/accept', AcceptHandler),
   ('/delete', RemoveTaskHandler),
-  ('/reported', ReportTaskHandler),
+  ('/reported', ReportTaskHandler)
+  #('/testUserMod', testUserMod),
+  #('/rendertest', testme)
 ]
 
 app = webapp2.WSGIApplication(mappings, debug=True)
