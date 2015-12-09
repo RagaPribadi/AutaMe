@@ -120,7 +120,7 @@ class ReportTaskHandler(webapp2.RequestHandler):
 	if task:
 	  if not task.reported:
 		email = get_user_email()
-		mail.send_mail(email, "auta-me-1@appspot.gserviceaccount.com", "[REPORTED POST]", "www.auta-me-1.appspot.com/task?id=" + str(task.key.urlsafe))
+		mail.send_mail(email, "auta-me-1@appspot.gserviceaccount.com", "[REPORTED POST]", "www.auta-me-1.appspot.com/task?id=" + id)
 	  task.reported = True
 
 	task._put()
