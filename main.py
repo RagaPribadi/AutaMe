@@ -183,13 +183,14 @@ class ClaimHandler(webapp2.RequestHandler):
       page_params = {
         'task': task
         }
-      task.pending = 2
-      task._put()
       from_address = 'auta-me-1@appspot.gserviceaccount.com'
       claimer_email = get_user_email()
       claim_body = 'The user with the email ' + claimer_email + ' wants to help! Email the claimer to receive help!'
       post_author = task.author
       mail.send_mail(from_address, post_author, 'Auta Post Claimed', claim_body)
+      task.pending = 2
+      task.claimer = claimer_email
+      task._put()
     self.redirect('/')
 ###############################################################################
 class TaskDetailHandler(webapp2.RequestHandler):
@@ -242,6 +243,7 @@ class Task_Model(ndb.Model):
   content = ndb.StringProperty()
   author = ndb.StringProperty()
   category = ndb.StringProperty()
+  claimer = ndb.StringProperty()
   pending = ndb.IntegerProperty()
   reported = ndb.BooleanProperty()
   time_created = ndb.DateTimeProperty(auto_now_add=True)
