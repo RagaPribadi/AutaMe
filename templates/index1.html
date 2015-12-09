@@ -27,10 +27,6 @@
 					<div class = "post-info">
 						<h5 class="post-time">{{task.time_created}}</h5>
 					</div>
-					
-					<div>		
-						<p>{{task.content}}</p>
-					</div>
 				</div>
 
 				{% if task.image %}
@@ -42,7 +38,17 @@
 				<div class="functions_bar">
 					<p class="comment pull-right">3 comments{{task.comments}}</p>
 					<p>
-						<button id = "claim_button" class = "claim_button claim_able button_large"> Claim </button>
+						<!-- 0 MEANS THAT IT IS NOT CLAIMED
+							 2 MEANS THAT IT IS CLAIMED-->
+						{% if task.pending == 0 %}
+						<a href="/claim?id={{task.key.urlsafe}}"><button id = "claim_button" class = "claim_button claim_able button_large" >Claim</button></a>
+						
+						{% else %}
+						
+						<b>CLAIMED</b>
+
+						{% endif %}
+
 					</p>
 				</div>
 			</div>
@@ -81,6 +87,7 @@ $(document).ready(function() {
 			xmlHttp.send(parameters);
 		}
 	}
+
 
 	function testjson() {
 		var xmlHttp = createXmlHttp();

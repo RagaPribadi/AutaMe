@@ -87,6 +87,7 @@ class PostTaskHandler(webapp2.RequestHandler):
     task.author = get_user_email()
     task.content = self.request.get('desc')
     task.category =self.request.get('category')
+    task.pending = 0
     task._put()
     self.response.out.write({'title':  task.title, 'author': task.author})
     self.redirect('/')
@@ -101,12 +102,40 @@ class Refresh(webapp2.RequestHandler):
 
     # self.response.write(cgi.escape(self.request.get('desc')))
     # self.response.write('</pre></body></html>')
-
+###############################################################################
+class AcceptHandler(webapp2.RequestHandler):
+  def get(self):
+    id = self.request.get('id')
+    task = get_task(id)
+    if task:
+      page_params = {
+        'task': task
+        }
+      task.key.delete()
+    self.redirect('/')
+###############################################################################
+class ClaimHandler(webapp2.RequestHandler):
+  def get(self):
+    id = self.request.get('id')
+    task = get_task(id)
+    if task:
+      page_params = {
+        'task': task
+        }
+      task.pending = 2
+      task._put()
+      from_address = 'auta-me-1@appspot.gserviceaccount.com'
+      claimer_email = get_user_email()
+      claim_body = 'The user with the email ' + claimer_email + ' wants to help! Email the claimer to receive help!'
+      post_author = task.author
+      mail.send_mail(from_address, post_author, 'Auta Post Claimed', claim_body)
+    self.redirect('/')
 ###############################################################################
 class TaskDetailHandler(webapp2.RequestHandler):
   def get(self):
     id = self.request.get('id')
     task = get_task(id)
+    current = get_user_email()
  #   email = get_user_email()
     if task:
       #task.comments = task.get_comments()
@@ -116,8 +145,8 @@ class TaskDetailHandler(webapp2.RequestHandler):
       # 'user_email': email,
       # 'login_url': users.create_login_url(),
       # 'logout_url': users.create_logout_url('/'),
-      'task': task
-
+      'task': task,
+      'current': current
       }
       render_template(self, 'task_detail.html', page_params)
     else:
@@ -152,6 +181,8 @@ class Task_Model(ndb.Model):
   content = ndb.StringProperty()
   author = ndb.StringProperty()
   category = ndb.StringProperty()
+  pending = ndb.IntegerProperty()
+
   time_created = ndb.DateTimeProperty(auto_now_add=True)
 
 
@@ -183,7 +214,9 @@ mappings = [
   ('/profile', ProfilePageHandler),
   ('/refresh', Refresh),
   ('/contact', ContactUsPageHandler),
-  ('/send-contact', FormHandler)
+  ('/send-contact', FormHandler),
+  ('/claim', ClaimHandler),
+  ('/accept', AcceptHandler)
 ]
 
 app = webapp2.WSGIApplication(mappings, debug=True)

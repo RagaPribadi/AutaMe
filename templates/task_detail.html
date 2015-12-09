@@ -3,9 +3,44 @@
 {% block bodycontent %}
 <div class="task_container">
 	<div class="task_content">
+		<style>
+		p {
+		    display: block;
+		    margin-top: 1em;
+		    margin-bottom: 1em;
+		    margin-left: 10%;
+		    margin-right: 10%;
+		}
+		</style>
 		
 		<h1 align="center"> {{task.title}} </h1>
-		<div class="task_content"> {{task.content}} </div>
+		<h6 align="center"> Category: {{task.category}} </h6>
+		<h6 align="center"> Time Posted: {{task.time_created}} </h6>
+		<p align="center">
+		{% if task.author == current and task.pending == 2 %}
+		
+		Pending Claim: <a href="/accept?id={{task.key.urlsafe}}"><button id = "claim_button" class = "claim_button claim_able button_large" >Accept</button></a><br>
+		Accepting will Remove the post
+
+		{% else %}
+
+			{% if task.author == current and task.pending == 0 %}
+			<b>STILL UNCLAIMED</b>
+
+			{% else %}
+
+				{% if task.author != current and task.pending == 0 %}
+				<a href="/claim?id={{task.key.urlsafe}}"><button id = "claim_button" class = "claim_button claim_able button_large" >Claim</button></a>
+
+				{% else %}
+				<b>CLAIMED</b>
+				{% endif %}
+			{% endif %}
+		{% endif %}
+		
+		</p>
+		<hr align="center" width="75%" >
+		<p> {{task.content}} </p>
 	</div>
 
 </div>
