@@ -10,9 +10,15 @@
 		<div class="col-md-3 toolbar">
 			<p class="lead">Filter</p>
 			<div class="list-group">
-				<a href="#" class="list-group-item active">All</a>
-				<a href="#" class="list-group-item">Household</a>
-				<a href="#" class="list-group-item">School Work</a>
+				<div class="list-group">
+					<a href="/" class="list-group-item active">All</a>
+					<a href="/Filter?filter=math" class="list-group-item active">Math</a>
+					<a href="/Filter?filter=writing" class="list-group-item active">Writing</a>
+					<a href="/Filter?filter=science" class="list-group-item active">Sciences</a>
+					<a href="/Filter?filter=engr" class="list-group-item active">Engineering</a>
+					<a href="/Filter?filter=music" class="list-group-item active">Music</a>
+					<a href="/Filter?filter=other" class="list-group-item active">Other</a>
+				</div>
 			</div>
 		</div>
 		<!-- /sidebar -->
@@ -23,7 +29,26 @@
 			<div class="task-container">
 				<div class="caption-full">
 					<!-- /task?id={{task.key.urlsafe}} -->
-					<h3 class = "title" ><a href="/task?id={{task.key.urlsafe}}">{{task.title}}</a></h3>
+					<h3 class = "title" >
+						{% if user_email == "auta-me1520@gmail.com" %}
+						<a href="/delete?id={{task.key.urlsafe}}">
+						<button type="button" class="btn btn-default" aria-label="Left Align">
+							<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+						</button>
+						</a>
+						{% endif %}
+						
+						<a href="/task?id={{task.key.urlsafe}}">{{task.title}}</a>
+						
+						{% if task.reported %}
+						<span class="glyphicon glyphicon-exclamation-sign pull-right" aria-hidden="true"></span>
+						{% else %}
+						<a href="/reported?id={{task.key.urlsafe}}">
+						<button type="button" class="btn btn-default pull-right" aria-label="Left Align">
+							<span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+						</button>
+						</a>
+						{% endif %}
 					<div class = "post-info">
 						<h5 class="post-time">{{task.time_created}}</h5>
 					</div>

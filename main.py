@@ -66,6 +66,47 @@ class ProfilePageHandler(webapp2.RequestHandler):
       'logout_url': users.create_logout_url('/')
       }
     render_template(self, 'profile_page.html', page_params)
+	
+class FilterPageHandler(webapp2.RequestHandler):
+  def get(self):
+    user_email = get_user_email()
+    if user_email:
+	  tasks = get_tasks()
+	  filterParam = self.request.get('filter')
+	  tasks = [task for task in tasks if task.category == filterParam]
+			
+	  page_params = {
+	  'tasks': tasks,
+	  'user_email': user_email,
+	  'nickname': get_user_nickname()
+	  }
+	  render_template(self, 'index1.html', page_params)
+    else:
+      page_params = {
+      'login_url': users.create_login_url('/')
+      }
+      render_template(self, 'login.html', page_params)
+	  
+class RemoveTaskHandler(webapp2.RequestHandler):
+  def get(self):
+	id = self.request.get('id')
+	task = get_task(id)
+	if task:
+	  task.key.delete()
+	self.redirect('/')
+	
+class ReportTaskHandler(webapp2.RequestHandler):
+  def get(self):
+	id = self.request.get('id')
+	task = get_task(id)
+	if task:
+	  if not task.reported:
+		email = get_user_email()
+		mail.send_mail(email, "auta-me-1@appspot.gserviceaccount.com", "[REPORTED POST]", "www.auta-me-1.appspot.com/task?id=" + str(task.key.urlsafe))
+	  task.reported = True
+
+	task._put()
+	self.redirect('/')
 
 class MapPageHandler(webapp2.RequestHandler):
   def get(self):
@@ -79,18 +120,22 @@ class PostPageHandler(webapp2.RequestHandler):
   def get(self):
     render_template(self, 'post_task.html', {})
 
+class InfoPageHandler(webapp2.RequestHandler):
+  def get(self):
+	render_template(self, 'info_page.html', {})
 
 class PostTaskHandler(webapp2.RequestHandler):
   def post(self):
-    task = Task_Model()
-    task.title = cgi.escape(self.request.get('title'))
-    task.author = get_user_email()
-    task.content = self.request.get('desc')
-    task.category =self.request.get('category')
-    task.pending = 0
-    task._put()
-    self.response.out.write({'title':  task.title, 'author': task.author})
-    self.redirect('/')
+	task = Task_Model()
+	task.title = cgi.escape(self.request.get('title'))
+	task.author = get_user_email()
+	task.content = self.request.get('desc')
+	task.category =self.request.get('category')
+	task.pending = 0
+	task.reported = False
+	task._put()
+	self.response.out.write({'title':  task.title, 'author': task.author})
+	self.redirect('/')
 
 class Refresh(webapp2.RequestHandler):
   def get(self):
@@ -182,7 +227,7 @@ class Task_Model(ndb.Model):
   author = ndb.StringProperty()
   category = ndb.StringProperty()
   pending = ndb.IntegerProperty()
-
+  reported = ndb.BooleanProperty()
   time_created = ndb.DateTimeProperty(auto_now_add=True)
 
 
@@ -203,11 +248,13 @@ def get_task(task_id):
 
 mappings = [
   ('/', MainPageHandler),
+  ('/Filter', FilterPageHandler),
   ('/post_task', PostTaskHandler),
   # ('/upload', UploadPageHandler),
   # ('/upload_complete', FileUploadHandler),
   # ('/dumb', DumbHandler),
   # ('/notdumb', NotDumbHandler),
+  ('/info', InfoPageHandler),
   ('/task', TaskDetailHandler),
   ('/post', PostPageHandler),
   ('/map', MapPageHandler),
@@ -216,7 +263,9 @@ mappings = [
   ('/contact', ContactUsPageHandler),
   ('/send-contact', FormHandler),
   ('/claim', ClaimHandler),
-  ('/accept', AcceptHandler)
+  ('/accept', AcceptHandler),
+  ('/delete', RemoveTaskHandler),
+  ('/reported', ReportTaskHandler),
 ]
 
 app = webapp2.WSGIApplication(mappings, debug=True)
