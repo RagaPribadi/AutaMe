@@ -14,6 +14,15 @@
 		</style>
 		
 		<h1 align="center"> {{task.title}} </h1>
+		<div align ="center">
+						{% if user_email == "AutaMe1520@gmail.com" %}
+						<a href="/delete?id={{task.key.urlsafe}}">
+						<button type="button" class="btn btn-default" aria-label="Left Align">
+							<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+						</button>
+						</a>
+						{% endif %}
+		</div>
 		<h6 align="center"> Category: {{task.category}} </h6>
 		<h6 align="center"> Time Posted: {{task.time_created}} </h6>
 		<p align="center">

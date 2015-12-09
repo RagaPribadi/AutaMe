@@ -124,7 +124,7 @@ class ReportTaskHandler(webapp2.RequestHandler):
 	if task:
 	  if not task.reported:
 		email = get_user_email()
-		mail.send_mail(email, "auta-me-1@appspot.gserviceaccount.com", "[REPORTED POST]", "www.auta-me-1.appspot.com/task?id=" + id)
+		mail.send_mail(email, "autame1520@gmail.com", "[REPORTED POST]", "www.auta-me-1.appspot.com/task?id=" + id)
 	  task.reported = True
 
 	task._put()
@@ -212,7 +212,8 @@ class TaskDetailHandler(webapp2.RequestHandler):
       # 'login_url': users.create_login_url(),
       # 'logout_url': users.create_logout_url('/'),
       'task': task,
-      'current': current
+      'current': current,
+      'user_email': get_user_email()
       }
       render_template(self, 'task_detail.html', page_params)
     else:
