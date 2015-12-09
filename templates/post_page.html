@@ -1,0 +1,83 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#cost").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+             // Allow: Ctrl+C
+            (e.keyCode == 67 && e.ctrlKey === true) ||
+             // Allow: Ctrl+X
+            (e.keyCode == 88 && e.ctrlKey === true) ||
+             // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+});
+
+</script>
+
+<section id="contact">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 text-center">
+				<h2>Post a Task</h2>
+				<p>
+
+				</p>
+			</div>
+			<div class="col-md-12"></div>
+
+			<div class="col-sm-6 col-md-12">
+				<form action="/post_task" method="post" role="form">
+					<div class="col-md-12">
+						<input id = "title" type="text" class="form-control" placeholder="Title">
+					</div>
+
+					<div class="col-md-6">
+						<input id = "cost" type="number" class="form-control" placeholder="Credits">
+						<!-- <div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+								Dropdown
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+								<li><a data-value="action">Action</a></li>
+								<li><a data-value="another action">Another action</a></li>
+								<li><a data-value="something else here">Something else here</a></li>
+								<li><a data-value="separated link">Separated link</a></li>
+							</ul>
+						</div> -->
+						<!-- <input id = "title" type="text" class="form-control" placeholder="Title"> -->
+					</div>
+					<div class="col-md-6">
+						<select class="form-control mainSelect" id = "category">
+							<option value="" selected disabled>Please select</option>
+							<option value="Math">Math</option>
+							<option value="Physics">Physics</option>
+							<option value="Chemistry">Chemistry</option>
+							<option value="Biology">Biology</option>
+							<option value="Writing">Writing</option>
+						</select>
+					</div>
+
+					<div id ="task_content" class="col-md-12">
+						<textarea id = "desc" class="form-control" rows="6" placeholder="description"></textarea>
+					</div>
+					<div class="col-md-12">
+						<input type="submit" value="POST" id = "post_button" class="form-control" />
+					</div>
+				</form>
+				</div>
+			</div>
+		</div>
+	</section>
+	{% endblock %}

@@ -1,0 +1,114 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+  <div id="topbar">
+  </div>
+  <div class="container">
+
+  <div id="w">
+    <br><br>
+
+    <div class="col-md-2"></div>
+    <div id="content" class="clearfix col-md-8">
+      <div class="username col-md-6">
+           <h1>{{nickname}}</h1>
+      </div>
+      <div id="userphoto" class = "col-md-6">
+          <img src="https://alessifoods.com/theme/alessifoods/img/generic-profile.png" alt="default avatar">
+      </div>
+
+      <div class = "col-md-8">
+      <nav id="profiletabs" class="profiletabs">
+        <ul class="clearfix">
+          <li><a href="#me" class="sel">Me</a></li>
+          <li><a href="#my_tasks" class="sel">My Tasks</a></li>
+          <li><a href="#settings">Settings</a></li>
+        </ul>
+      </nav>
+      </div>
+
+      <div class = "col-md-2"> </div>
+      <div class = "col-md-8">
+      <section id="me">
+
+        <p>Our homepage  <a href="http:auta-me.appspot.com">Auta-me</a>.</p>
+        
+        <p> Some information </p>
+
+        <p class="setting"><span>Credits Avaliable: </span> 100{{user.credits}}
+
+
+        </p>
+    
+      </section>
+      
+      
+       <section id="my_tasks" class = "hidden">
+
+        <p>Our homepage  <a href="http:auta-me.appspot.com">Auta-me</a>.</p>
+        
+        <p> Some information </p>
+
+        <p class="setting"><span>Credits Avaliable: </span> 100{{user.credits}}
+
+
+        </p>
+    
+      </section>
+
+
+       <section id="tasks_accepted" class = "hidden">
+
+        <p>Our homepage  <a href="http:auta-me.appspot.com">Auta-me</a>.</p>
+        
+        <p> Some information </p>
+
+        <p class="setting"><span>Credits Avaliable: </span> 100{{user.credits}}
+
+
+        </p>
+    
+      </section>
+      
+      <section id="settings" class="hidden">
+        <p>Edit your user settings:</p>
+        
+        <p class="setting"><span>E-mail Address </span> {{user_email}}</p>
+        
+        <p class="setting"><span>Language </span> English(US)</p>
+        
+        <p class="setting"><span>Profile Status </span> Public</p>
+        
+        <p class="setting"><span>Connected Accounts</span> None</p>
+
+        <div class = "logout">
+          <button class = "logout_button button_large"><a href="{{ logout_url }}">Sign Out</a></button>
+        </div>
+
+      </section>
+      </div>
+      <div class = "col-md-2"> </div>
+
+    </div><!-- @end #content -->
+     <div class="col-md-2"></div>
+  </div><!-- @end #w -->
+  </div>
+<script type="text/javascript">
+
+$(function(){
+  $('#profiletabs ul li a').on('click', function(e){
+    e.preventDefault();
+    var newcontent = $(this).attr('href');
+    
+    $('#profiletabs ul li a').removeClass('sel');
+    $(this).addClass('sel');
+    
+    $('#content section').each(function(){
+      if(!$(this).hasClass('hidden')) { $(this).addClass('hidden'); }
+    });
+    
+    $(newcontent).removeClass('hidden');
+  });
+});
+</script>
+
+{% endblock %}

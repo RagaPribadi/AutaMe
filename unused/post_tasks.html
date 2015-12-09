@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		
+	</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/templatemo_style.css">
+	<link rel="stylesheet" href="css/style.css">
+<!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>		
+</head>
+<body>
+
+{% for task in tasks %}
+<i>{{task.time_created}}</i><br>
+{{task.text}}<br>
+{{task.author}}
+<br><br>
+{% endfor %}
+
+{% block bodycontent %}
+{% if user_email %}
+	<section id="contact">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-10 text-center">
+					<h2>Post a Task</h2>
+					<p>
+
+					 </p>
+				</div>
+				<div class="col-md-12"></div>
+
+				<div class="col-sm-6 col-md-12">
+					<form action="/post_task" method="post" role="form">
+						<div class="col-md-6">
+							<input type="text" class="form-control" placeholder="Name">
+						</div>
+						<div class="col-md-6">
+							<input type="email" class="form-control" placeholder="Email">
+						</div>
+						<div class="col-md-12">
+							<input type="text" class="form-control" placeholder="Subject">
+						</div>
+						<div class="col-md-12">
+							<textarea class="form-control" rows="6" placeholder="Message"></textarea>
+						</div>
+						<div class="col-md-12">
+							<input type="submit" value="POST" class="form-control">
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endif %}
+{% endblock %}
+
+</body>
+</html>
