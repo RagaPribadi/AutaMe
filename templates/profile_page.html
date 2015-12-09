@@ -19,7 +19,6 @@
       <div class = "col-md-8">
       <nav id="profiletabs" class="profiletabs">
         <ul class="clearfix">
-          <li><a href="#me" class="sel">Me</a></li>
           <li><a href="#my_tasks" class="sel">My Tasks</a></li>
           <li><a href="#settings">Settings</a></li>
         </ul>
@@ -28,41 +27,65 @@
 
       <div class = "col-md-2"> </div>
       <div class = "col-md-8">
-      <section id="me">
-
-        <p>Our homepage  <a href="http:auta-me.appspot.com">Auta-me</a>.</p>
-        
-        <p> Some information </p>
-
-        <p class="setting"><span>Credits Avaliable: </span> 100{{user.credits}}
-
-
-        </p>
-    
-      </section>
       
       
        <section id="my_tasks" class = "hidden">
 
         <p>Our homepage  <a href="http:auta-me.appspot.com">Auta-me</a>.</p>
         
-        <p> Some information </p>
+        <div id = "tasks-container" class="tasks-container col-md-9">
+			{% for task in tasks %}
+			<div class="task-container">
+				<div class="caption-full">
+					<!-- /task?id={{task.key.urlsafe}} -->
+					<h3 class = "title" >
+						{% if user_email == "AutaMe1520@gmail.com" %}
+						<a href="/delete?id={{task.key.urlsafe}}">
+						<button type="button" class="btn btn-default" aria-label="Left Align">
+							<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+						</button>
+						</a>
+						{% endif %}
+						
+						<a href="/task?id={{task.key.urlsafe}}">{{task.title}}</a>
+						
+						{% if task.reported %}
+						<span class="glyphicon glyphicon-exclamation-sign pull-right" aria-hidden="true"></span>
+						{% else %}
+						<a href="/reported?id={{task.key.urlsafe}}">
+						<button type="button" class="btn btn-default pull-right" aria-label="Left Align">
+							<span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+						</button>
+						</a>
+						{% endif %}
+					<div class = "post-info">
+						<h5 class="post-time">{{task.time_created}}</h5>
+					</div>
+				</div>
 
-        <p class="setting"><span>Credits Avaliable: </span> 100{{user.credits}}
+				{% if task.image %}
+				<div class="thumbnail">
+					<img class="img-responsive" src="http://placehold.it/800x300" alt="">
+				</div>
+				{% endif %}
 
+				<div class="functions_bar">
+					<p>
+						<!-- 0 MEANS THAT IT IS NOT CLAIMED
+							 2 MEANS THAT IT IS CLAIMED-->
+						{% if task.pending == 0 %}
+						<a href="/claim?id={{task.key.urlsafe}}"><button id = "claim_button" class = "claim_button claim_able button_large" >Claim</button></a>
+						
+						{% else %}
+						
+						<b>CLAIMED</b>
 
-        </p>
-    
-      </section>
+						{% endif %}
 
-
-       <section id="tasks_accepted" class = "hidden">
-
-        <p>Our homepage  <a href="http:auta-me.appspot.com">Auta-me</a>.</p>
-        
-        <p> Some information </p>
-
-        <p class="setting"><span>Credits Avaliable: </span> 100{{user.credits}}
+					</p>
+				</div>
+			</div>
+			{% endfor %}
 
 
         </p>

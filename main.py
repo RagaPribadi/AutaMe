@@ -77,13 +77,17 @@ class MainPageHandler(webapp2.RequestHandler):
 
 class ProfilePageHandler(webapp2.RequestHandler):
   def get(self):
-    user_email = get_user_email()
-    page_params = {
-      'nickname': get_user_nickname(),
-      'user_email': user_email,
-      'logout_url': users.create_logout_url('/')
-      }
-    render_template(self, 'profile_page.html', page_params)
+	user_email = get_user_email()
+	tasks = get_tasks()
+	for task in tasks:
+	  tasks = [task for task in tasks if task.claimer == user_email]
+	page_params = {
+	  'tasks': tasks,
+	  'nickname': get_user_nickname(),
+	  'user_email': user_email,
+	  'logout_url': users.create_logout_url('/')
+	}
+	render_template(self, 'profile_page.html', page_params)
 	
 class FilterPageHandler(webapp2.RequestHandler):
   def get(self):
