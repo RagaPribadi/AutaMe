@@ -108,9 +108,6 @@ class ReportTaskHandler(webapp2.RequestHandler):
 	task._put()
 	self.redirect('/')
 
-class MapPageHandler(webapp2.RequestHandler):
-  def get(self):
-    render_template(self, 'map_page.html', {})
 
 class ContactUsPageHandler(webapp2.RequestHandler):
   def get(self):
@@ -257,7 +254,6 @@ mappings = [
   ('/info', InfoPageHandler),
   ('/task', TaskDetailHandler),
   ('/post', PostPageHandler),
-  ('/map', MapPageHandler),
   ('/profile', ProfilePageHandler),
   ('/refresh', Refresh),
   ('/contact', ContactUsPageHandler),
